@@ -1,0 +1,109 @@
+//ques
+here we have to return square of all element in the array in sorted order . but it have negative element as well . 
+
+here brute force o(nlogn) is not accepted we have to make it o(n) without sorting the array ... that's the twist.
+  simple approach but not accepted ... array elements are already sorted ... so if there is negative element its square will be postivie so after squaring all the element do sort them .
+
+
+step 1 : square all element ans[i] = a[i]*a[i] : o(n)
+  step 2 : sort them : o(nlogn)
+vector<int> sq_ar(vector<int>& a){
+    int n = a.size();
+    vector<int> ans(n);
+    for(int i = 0 ; i<n ; i++){
+        ans[i] = a[i]*a[i];
+    }
+    sort(ans.begin(), ans.end());
+    return ans ;
+}
+--------------------------------------------------------------------------------------------------------------------------
+
+  optimised : two pointer approach. similar of merge two sorted array . 
+  
+
+
+
+
+
+vector<int> sortedSquares(vector<int>& nums) {
+        int sz = nums.size();
+        vector<int> a ; // negative array
+        vector<int> b ; // pos array
+
+        // check if element is pos or negative and push_back them at their respective array.
+
+        for(int i = 0 ; i< sz ; i++){
+            if(nums[i]>0){          //element is positive so push it in b
+                b.push_back(nums[i]);
+            }
+            else{
+                a.push_back(nums[i]); //element negative so push it in a 
+            }
+        }
+        //case 1 : if all elements are negative : so they are in descedning order and sorted just reverse them 
+
+        if(b.size() == 0){
+            for(int i = 0 ; i<a.size() ; i++){
+                a[i] = a[i]*a[i];
+                
+            }
+            reverse(a.begin(), a.end());
+            return a ;
+            
+        }
+
+        if(a.size() == 0){ //all elements are positive no negative element . no need to do anything just return square as it is. 
+            for(int i = 0 ; i<b.size() ; i++){
+                b[i] = b[i]*b[i];
+                
+                
+            }
+
+            return b;
+        }
+
+        // case 3: it contains pos + negative elements
+
+        int i = 0 , j = 0 ;
+        int idx = 0 ;
+        int n = a.size();
+        int m = b.size();
+        int u = n+m ;
+        vector<int>result(u) ;
+
+        for(int i = 0 ; i< n ; i++){
+            a[i] = a[i]*a[i];
+            
+        }
+        reverse(a.begin(), a.end());
+
+        for(int i = 0 ; i<m ; i++){
+            b[i] = b[i]*b[i] ;
+        }
+        while(i<n && j<m){
+            if(a[i] <= b[j]){
+                result[idx] = a[i] ;
+                idx++;
+                i++;
+            }
+            else{
+                result[idx] = b[j];
+                idx++;
+                j++;
+            }
+           
+
+        }
+        while(i<n){
+            result[idx] = a[i];
+            idx++ ;
+            i++;
+        }
+        while(j<m){
+            result[idx] = b[j];
+            idx++ ;
+            j++;
+        }
+        return result;
+        
+    }
