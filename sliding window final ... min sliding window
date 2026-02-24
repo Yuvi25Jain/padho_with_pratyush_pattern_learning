@@ -1,0 +1,77 @@
+leetcode 76 : amazon 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if (t.size() > s.size()) return "";
+
+        int need[256] = {0};
+        int window[256] = {0};
+
+        for (char c : t) need[(unsigned char)c]++;
+
+        int have = 0, needcnt = 0;
+        for (int i = 0; i < 256; i++) {
+            if (need[i] > 0) needcnt++;   // ✅ fixed increment
+        }
+
+        int left = 0, minLen = INT_MAX, start = 0;
+
+        for (int high = 0; high < s.size(); high++) {
+            char c = s[high];
+            window[(unsigned char)c]++;
+
+            if (need[(unsigned char)c] > 0 &&
+                window[(unsigned char)c] == need[(unsigned char)c]) {
+                have++;
+            }
+
+            while (have == needcnt) {
+                if (high - left + 1 < minLen) {
+                    minLen = high - left + 1;
+                    start = left;
+                }
+
+                char d = s[left];
+                window[(unsigned char)d]--;
+                if (need[(unsigned char)d] > 0 &&
+                    window[(unsigned char)d] < need[(unsigned char)d]) {
+                    have--;
+                }
+                left++;
+            }
+        }
+
+        return (minLen == INT_MAX) ? "" : s.substr(start, minLen);
+    }
+};
+
+-----------------------------------------------------
+
+209" miniums subarray leetcode 
+
+
+ int minSubArrayLen(int k, vector<int>& nums) {
+        int n = nums.size();
+        int sum = 0 ;
+        int low = 0 ;
+        int ans = INT_MAX;
+        for(int high = 0 ; high<n ; high++){
+            sum += nums[high];
+            while(sum >= k){
+                int len = high - low + 1 ;
+                ans = min(ans,len);
+                sum -= nums[low];
+                low ++ ;
+
+            }
+        }
+        return (ans == INT_MAX)? 0 : ans;
+        
+    }
+
+
+
