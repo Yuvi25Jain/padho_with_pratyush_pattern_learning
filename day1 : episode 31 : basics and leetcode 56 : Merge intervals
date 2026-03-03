@@ -1,0 +1,49 @@
+Here given 2d array : range/ intervals i.e vector<vector<int>>& intervals.
+  pair [start1, end1] , [start2,end2]
+
+no merge if end1<start2
+  merge if end1>= start2
+
+sort array start , start1<= start2 
+
+  so after merged / combined new interval will be [start1 , max(end1 , end2)]
+
+  min is start1 , max either be end1 or end2. 
+
+eg : [10,15] , [12,16] , [20,25]
+
+start 10 , 12, 20 sorted
+  but end1 = 15 > start2 = 12 so merge them
+  min : 10 , 12 : is new start = 10
+    max of end1 ,end2 => 15,12 is 15 so new end1 = 15
+
+
+  leetcode 56: merge interval code:
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> res;
+        if(intervals.empty()) return res;
+        sort(intervals.begin(), intervals.end());
+        int n = intervals.size();
+        int start1 = intervals[0][0];
+        int end1 = intervals[0][1];
+        for(int i = 1 ; i<n ; i++){
+            int start2 = intervals[i][0];
+            int end2 = intervals[i][1];
+
+            if(end1>=start2){
+                start1 = start1;
+                end1 = max(end1,end2);
+                continue;
+            }
+            else{
+                res.push_back({start1,end1});
+                start1 = start2;
+                end1 = end2;
+            }
+            
+        }
+        res.push_back({start1,end1});
+        return res;
+        
+    }
+    
