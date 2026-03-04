@@ -1,0 +1,23 @@
+we are given with start / checkin time and stop checkout time array , we need to return max no of room required at a tym. if we peak room from start then we have to create a room else we need to destroy it. similar as merge two sorted array.
+
+
+int meet(vector<int> start ,vector<int> stop){
+int n = start.size(); //size of both will be same as the person who checks in will definatelgy check out too.
+
+sort(start.begin(), start.end());
+sort(stop.begin(), stop.end());
+int res = 0  , room = 0 , i= 0 , j = 0 ;
+
+while(i<n & j<n){
+if(stop[i] < stop[j]){
+room++;
+res = max(res,room)
+i++;
+}
+else{
+room--;
+j++;
+}
+}
+return res ;
+}
