@@ -1,0 +1,30 @@
+aabbcd => bbcd =? cd answer
+
+//create stack 
+
+stack<char>st;
+int n = s.size() ; // size of string
+string res;
+
+//step2 
+
+for(int i = 0 ; i<n  ; i++){
+if(st.empty() == s[i]){
+st.push(s[i])
+continue;
+
+
+if(st.top() == s[i])
+st.pop();
+continue;
+
+else{
+st.push(s[i);
+
+//now reverse the resultant string from stack
+
+while(!st.empty()){
+res.push_back(st.top())
+reverse(res.begin(), res.end())
+return res
+
