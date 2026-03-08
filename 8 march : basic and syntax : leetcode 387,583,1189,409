@@ -1,0 +1,129 @@
+see basics and syntax from copy
+
+#q1: lc : 387 : first unique character in string. op  return index of that element whihc is unique
+ int firstUniqChar(string s) {
+
+        int n = s.size();
+
+        unordered_map<char,int> f;
+        for(int i = 0 ; i<n ; i++){
+            f[s[i]]++;
+        }
+        for(int i = 0 ; i<n ; i++){
+            if(f[s[i]] == 1){
+                return i ;
+            }
+        }
+        return -1;
+    }
+
+
+  -------------------------
+
+  #q2 : lc 583 : ransom (need) note (magazine available) op true or false
+
+  bool canConstruct(string ransomNote, string magazine) {
+        int n = ransomNote.size();
+        int m = magazine.size();
+
+        unordered_map<char,int>demand;
+        unordered_map<char,int>available;
+
+        for(int i = 0 ; i<n ; i++){
+            demand[ransomNote[i]]++ ;
+        }
+        
+        for(int i = 0 ; i<m ; i++){
+            available[magazine[i]]++ ;
+        }
+
+        return yes(demand,available);
+        
+    }
+
+    bool yes(unordered_map<char,int>& demand , unordered_map<char,int>& available ){
+        for(auto it: demand){
+            char c = it.first;
+            int fneed = it.second;
+            int favail = available[c];
+            if(favail < fneed){
+                return false;
+            }
+        }
+        return true ;
+    }
+
+  --------------------------------------------------------------------------------------------------------------------------------------------------
+
+  #q3 : lc 1189 : maximum ballons. same as q2 but here we need to return how many pairs of ballons we can form from available.
+
+  int maxNumberOfBalloons(string text) {
+        int n = text.size();
+        unordered_map<char,int> have;
+        for(int i = 0 ; i<n ; i++){
+            have[text[i]]++;
+        }
+        unordered_map<char,int> need;
+        need['b'] = 1 ;
+        need['a'] = 1 ;
+        need['l'] = 2 ;
+        need['o'] = 2 ;
+        need['n'] = 1 ;
+
+        int res = INT_MAX;
+        for(auto it: need){
+            char c = it.first;
+            int fneed = it.second;
+            int fhave = have[c];
+            int times = fhave/fneed;
+            res = min(res,times);
+        }
+        return res;
+        
+    }
+
+  -------------------------------------------------------------------------------------------------------------------------------------------------
+
+  #q4: lc 409 : longest palindrome
+
+  even frq no issue just put them together
+  odd frequency make pair and then add +1 in the result
+
+  int longestPalindrome(string s) {
+        int n = s.size();
+        unordered_map<char,int> f;
+        for(int i = 0 ; i<n ; i++){
+            f[s[i]]++;
+
+        }
+        bool odd = false;
+        int res = 0 ;
+        // handle even first as even frequency will not have any issue
+
+        for(auto it : f){
+            int val = it.second;
+            if(val%2 == 0){
+                res+=val;
+            }
+            else{
+                odd = true;
+            }
+        }
+        //edge case absence of odd
+        if(odd == false){
+            return res ;
+        }
+
+        //handle odd ... make even no of pair and add to res then add +1
+
+        for(auto it : f){
+            int val = it.second;
+            if(val%2 == 1){
+                res+=val-1;
+            }
+        }
+        return res+1;
+        
+    }
+
+  
