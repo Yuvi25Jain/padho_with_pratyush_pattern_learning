@@ -1,0 +1,75 @@
+lc 104 : max depth of tree
+
+   TreeNode* insert(TreeNode* root , int val){
+    if(!root) return new TreeNode(val);
+
+    // duplicates go to LEFT (as required)
+    if(val <= root->val){
+        root->left = insert(root->left , val);
+    }
+    else{
+        root->right = insert(root->right,val);
+    }
+
+    return root;
+}
+    int maxDepth(TreeNode* root) {
+    if(!root) return 0 ;
+    return 1 + max(maxDepth(root->left), maxDepth(root->right));
+        
+    }
+
+---------------------------------------------------------------------------
+
+  llc 110 blaanced binary tree
+
+  
+    int dfs(TreeNode* root , bool &ans){
+        if(root == NULL) {
+            return 0 ;
+        }
+        
+
+        int left = dfs(root->left,ans);
+        int right = dfs(root->right,ans);
+
+        if(abs(left-right)>1){
+            ans = false;
+        }
+        return 1 + max(left,right);
+    }
+
+
+    bool isBalanced(TreeNode* root) {
+        if(root == NULL) return true ;
+
+        bool ans = true;
+        dfs(root, ans);
+
+        return ans;
+       
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+  lc 111 : min depth of binary tree
+
+  int minDepth(TreeNode* root) {
+        if(root == NULL){
+            return 0 ;
+        }
+        if(root->left == NULL && root->right == NULL){
+            return 1 ;
+        }
+
+        if(root->left == NULL){
+            return 1 + minDepth(root->right);
+        }
+        
+        if(root->right == NULL){
+            return 1 + minDepth(root->left);
+        }
+        return 1+ min(minDepth(root->left), minDepth(root->right));
+        
+    }
+
