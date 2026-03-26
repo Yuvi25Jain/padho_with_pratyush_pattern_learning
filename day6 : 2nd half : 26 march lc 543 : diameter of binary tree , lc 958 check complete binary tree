@@ -1,0 +1,61 @@
+q16. lc 543: diameter of binary tree
+  diameter : maximum distance between two leaf nodes.
+    find height of tree from root. 
+
+
+int helper(TreeNode* root , int &res) {
+        if(root == NULL){
+            return 0 ;
+        }
+        
+        int left = helper(root->left,res);
+        int right = helper(root->right,res);
+
+        int sum = left + right ;
+        res = max(res,sum);
+
+        return 1 + max(left,right);
+
+        
+    }
+    int diameterOfBinaryTree(TreeNode* root) {
+    int res = 0;
+    helper(root, res);
+    return res;
+    }
+
+
+
+  ------------------------------------------------------------------------------------------------------------------------------------------
+
+  q17. lc 958 : check complete binary tree
+
+    complete if leaf level order is node node NULL 
+    not complete if it is node NULL node
+
+  bool isCompleteTree(TreeNode* root) {
+        if(root == NULL) return true ;
+        bool nullfound = false;
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* t = q.front();
+            q.pop();
+            if(t == NULL){
+                nullfound = true;
+            }
+            else{
+                if(nullfound == true){
+                    return false;
+                }
+                else{
+                    q.push(t->left);
+                    q.push(t->right);
+                }
+            }
+        }
+        return true;
+        
+    }
+
+  
