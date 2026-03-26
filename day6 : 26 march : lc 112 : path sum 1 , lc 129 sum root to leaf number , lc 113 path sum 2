@@ -1,0 +1,71 @@
+q13 . lc 112 path sum 1 ... not today code it is prev for latest code and understanding see copy
+
+bool hasPathSum(TreeNode* root, int targetSum) {
+        if (!root) return false;
+        // If leaf node
+        if (!root->left && !root->right) {
+            return targetSum == root->val;
+        }
+        // Recurse left or right
+        return hasPathSum(root->left, targetSum - root->val) ||
+               hasPathSum(root->right, targetSum - root->val);
+        
+    }
+
+NOTE : we have to find the path sum from root to leaft node. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+q14 . lc 129 : sum root to leaf number
+
+NOTE : catch we have to convert digit into number. for eg append data from root to leaf node. and then return the sum of all such parts. 
+  how to do this . simple just use sum = sum*10 + root->data (digit)
+
+
+   int sumNumbers(TreeNode* root, int sum = 0) {
+    if(root == NULL){
+        return 0;  // base case
+    }
+
+    sum = sum * 10 + root->val;  // carry path value
+
+    if(root->left == NULL && root->right == NULL){
+        return sum;  // leaf contributes full number
+    }
+
+    int res = 0;
+    res += sumNumbers(root->left, sum);
+    res += sumNumbers(root->right, sum);
+
+    return res;
+}
+
+MISTAKE : while recursion call in last two line you are directly calling them which is giving error.  so store their result in res
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+q15. lc 113 path sum 2 . same as path sum 1 but we have to return the path in 2d array whose sum is equal to target.
+
+  vector<vector<int>> pathSum(TreeNode* root, int targetSum,vector<int> diary = {} , int sum = 0) {
+        vector<vector<int>> res;
+        if (root == NULL) {
+            return res; // return empty result
+        }
+        sum = sum + root->val;
+        diary.push_back(root->val);
+        if (root->left == NULL and root->right == NULL) {
+            if (sum == targetSum) {
+                res.push_back(diary);
+                diary.pop_back();
+               
+            }
+        } else {
+            vector<vector<int>> leftRes = pathSum(root->left, targetSum, diary,sum);
+             vector<vector<int>> rightRes =pathSum(root->right, targetSum, diary,sum);
+            diary.pop_back();
+            res.insert(res.end(), leftRes.begin(), leftRes.end());
+            res.insert(res.end(), rightRes.begin(), rightRes.end());
+           
+        }
+        return res;
+    }
