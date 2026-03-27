@@ -1,0 +1,25 @@
+q20 , lc 105 construct a binary tree from indorder and preorder .
+
+  int idx = 0 ;
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int,int> in;
+        for(int i = 0 ; i<inorder.size(); i++){
+            in[inorder[i]] =  i ;
+            
+        }
+        return helper(preorder,0 , inorder.size()-1,in); //
+        
+    }
+    TreeNode* helper(vector<int>& preorder , int low , int high,  unordered_map<int,int>& in){
+        if(low>high) return nullptr;
+
+        TreeNode*  node = new TreeNode(preorder[idx]);
+        idx++;
+
+        int id = in[node->val];
+        node->left = helper(preorder, low , id-1,in);
+        node->right = helper(preorder, id+1 ,high,in);
+
+        return node;
+
+    }
