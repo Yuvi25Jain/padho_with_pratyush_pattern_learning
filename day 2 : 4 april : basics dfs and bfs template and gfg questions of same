@@ -1,0 +1,106 @@
+video link :  https://youtu.be/O04KAy7cLBs?si=G-suhyvkQ-Cl4bys
+
+following is the compiler code 
+
+  //DFS and BFS : time complexcity as well as space complexicty is equal to O(n)
+
+// creating adjacency list
+vector<vector<int>> buildList(int n , int m){
+    vector<vector<int>> adj(n);
+    for(int edge = 0 ; edge < m ; edge++){
+        int src , dest;
+        cin >> src >> dest;
+        adj[src].push_back(dest);
+        adj[dest].push_back(src); // undirected graph
+    }
+    return adj;
+}
+
+// printing adjacency list
+void printList(const vector<vector<int>>& adj){
+    int n = adj.size();
+    for(int i = 0 ; i < n ; i++){
+        cout << i << " -> ";
+        for(auto node : adj[i]){
+            cout << node << " ";
+        }
+        cout << endl;
+    }
+}
+
+// DFS implementation
+void dfs(vector<vector<int>>& adj , int node , vector<int>& res , vector<bool>& vst){
+    res.push_back(node);
+    vst[node] = true; // mark visited
+    for(int i = 0 ; i < adj[node].size() ; i++){
+        int neigh = adj[node][i];
+        if(!vst[neigh]){
+            dfs(adj, neigh, res, vst);
+        }
+    }
+}
+
+// helper function (like GFG style)
+vector<int> helpper(vector<vector<int>>& adj){
+    int n = adj.size();
+    vector<int> res;
+    vector<bool> vst(n, false); // initially all false
+    dfs(adj, 0, res, vst);      // start DFS from node 0
+    return res;
+}
+
+//bfs implementation direct helper , no separate void bfs needed
+vector<int> helper_bfs(vector<vector<int>>& adj){
+    int n = adj.size();
+    vector<int>res;
+    vector<bool>vis(n,false);
+    
+    queue<int>q;
+    q.push(0);
+    vis[0] = true; //vis = visited
+    
+    
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        res.push_back(node);
+        
+        //  put unvisited neighbours
+        for(int i = 0 ; i<adj[node].size(); i++){
+            int neigh = adj[node][i];
+            if(vis[neigh] == false){
+                q.push(neigh);
+                vis[neigh] = true;
+            }
+        }
+    }
+    return res;
+    
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<int>> adj = buildList(n, m);
+
+    cout << "Adjacency List:\n";
+    printList(adj);
+
+    vector<int> dfsres = helpper(adj);
+    cout << "\nDFS Result:\n";
+    for(auto node : dfsres){
+        cout << node << " ";
+    }
+    cout << endl;
+    
+    //bfs printing
+    vector<int> bfsres = helper_bfs(adj);
+    cout<<"BFS result: "<<endl;
+    for(auto node : bfsres){
+        cout<<node<<" ";
+    }
+    cout<<endl;
+
+    return 0;
+}
