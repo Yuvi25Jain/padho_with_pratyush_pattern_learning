@@ -52,7 +52,7 @@ vector<vector<int>> buildList(int n, int m) { //n vertex , m for edges.
 
     for (int edge = 0; edge < m; edge++) {
         int u, v;
-        cin >> u >> v;
+        cin >> u >> v;                            // u for source and v for dest.
         adj[u].push_back(v);
         adj[v].push_back(u); // for undirected graph
     }
