@@ -1,0 +1,95 @@
+given 2d character boolean array. 
+
+  An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+ 
+
+Example 1:
+
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+Example 2:
+
+Input: grid = [
+  ["1","1","0","0","0"],
+  ["1","1","0","0","0"],
+  ["0","0","1","0","0"],
+  ["0","0","0","1","1"]
+]
+Output: 3
+
+
+  tc = sc = o(n*m)
+
+
+// note swaping order qs mn , my convention nm where n is rows and m is col
+
+   
+
+    // part 1 : check : true/false : if the matrix is valid , invalid if it is
+    // less than 0 (out of matrix corner elements)
+
+    int x[4] = {-1, 1, 0,
+                0}; // row index four direction up , down , left , right . no
+                    // dig allowed. if it is then 8 directions will be there
+    int y[4] = {0, 0, -1, 1}; // col
+
+    bool valid(int i, int j, int n, int m) {
+        if (i < 0 || i >= n || j < 0 || j >= m) {
+            return false;
+        }
+        return true;
+    }
+
+    // part 2: apply dfs , condition for dfs(explore all connecting land , no
+    // zero , 1 (hor , vert allowed) , visited false)
+
+    void dfs(vector<vector<char>>& grid, int n, int m, int i, int j, vector<vector<bool>>& vis) {
+            // first mark the curr as visited
+            vis[i][j] = true;
+
+            //explore whether to count it as island
+            for(int k = 0 ; k<4 ; k++){
+                int row = i + x[k];
+                int col = j + y[k];
+                if(valid(row,col,n,m) && grid[row][col] == '1' && vis[row][col] == false){
+                dfs(grid,n,m,row,col,vis);
+
+            }
+            }
+          
+        return ;
+
+    }
+
+
+    //part 3: 
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size(); 
+        int i , j;
+        int res = 0 ;
+
+        //2d bool vector
+        vector<vector<bool>> vis(n);
+        for(int i = 0 ; i<n ; i++){
+            vector<bool> t (m,false);
+            vis[i] = t;
+        }
+
+
+        for(int i = 0 ; i<n ; i++){
+            for(int j = 0 ; j<m ; j++){
+                if(grid[i][j] == '1' && vis[i][j] == false){
+                    dfs(grid,n,m,i,j,vis);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
