@@ -1,0 +1,75 @@
+cycle means we reach to starting element again after whole graph traversal.
+
+UNDIRECTED GRAPH : there is min 3 element required , two element will not form any cycle. 
+  concept : parent node should be ignore . 
+    condition for cycle : vis[neigh] == true (1) and neigh != parent then cycle is there. else apply dfs to unvisited element. 
+
+
+DIRECTED GRAPH : even 2 element can form cycle 0 to 1 and  1 to 0, 
+concept : parent concept fail here (may or may not be edge b/w dest to souce) , introduce new concept of path array along with visited array.
+
+
+Code:
+
+  // common for both direced and undirected graph
+  bool iscycle(int n , vector<vctor<int>>&edges){
+      vector<vector<int>>a(n);
+    for(int i = 0 ; i< edges.size() ; i++){
+      int src = edges[i][0];
+      int dest = edges[i][1];
+      a[src].push_back(dest);
+      a[dest].push_back(src) ; //remove this line for directed graph
+    }
+  vector<bool>vis(n,0);
+  //for connected component
+
+  for(int i = 0 ; i<n ; i++){
+    if(vis[i] == 0){
+      dfs(a,n,i,-1,vis);
+    }
+    return cycle;
+
+  }
+
+//global variable in both : 
+  bool cycle = false;
+  // undirected
+void dfs(vector<vector<int>>&a , int n , int parent , vector<bool>& vis){
+    //initially all 0/ F in visited array
+
+    vis[node] = 1;
+    for(int j = 0 ; j<a[node].size();j++){
+      ubt neigh = a[node][j];
+
+      if(vis[neigh] == 1 && neigh!= parent){
+        cycle = true;
+      }
+      if(vi[neigh] == 0){
+        dfs(a,n,neigh , node,vis);
+
+      }
+      return " " ;
+
+    }
+
+
+  //directed graph :
+  void dfs(vector<vector<int>>&a , int n , int node , vector<bool>& path , vector<bool>& vis){
+    //initially all 0/ F in visited array
+
+    vis[node] = 1;
+    path[node] = 1;
+    for(int j = 0 ; j<a[node].size();j++){
+      ubt neigh = a[node][j];
+
+      if(vis[neigh] == 1 && path[neigh] == 1){
+        cycle = 1;
+      }
+      if(vi[neigh] == 0){
+        dfs(a,n,neigh ,path,vis);
+
+      }
+      path[node] = 0 ;
+      return " " ;
+
+    }
