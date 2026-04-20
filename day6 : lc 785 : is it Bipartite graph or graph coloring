@@ -1,0 +1,44 @@
+Bipartite Graph ? 
+  means graph is divisible in two parts(may or may not be equal) , with condition mandatory to satisfy , no node of same part should  be connected with each other and node from one part may or may not be connected with the node of other part.
+
+  if this contradicts ( node of same part is connected with each other) then the graph is not bipartite else it wil be.
+
+
+  input : no of node and their adjaceny list
+  o/p : true/ false
+
+  bool res = true;
+
+    void dfs(vector<vector<int>>& a, int node , int c, vector<int>& colors){
+        colors[node] = c;
+
+        //explore all the neighbour
+
+        for(int j = 0 ; j < a[node].size() ; j++){
+            int neigh = a[node][j];
+        
+            // neighbour != -1  already colored. equal to -1 means not colored
+            if(colors[neigh] != -1 && colors[neigh] == c){
+                res = false;
+            }
+            //neighbour is colored
+
+            if(colors[neigh] == -1){
+                dfs(a,neigh,1-c,colors);
+            }
+        }
+        return ;
+    }
+
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<int>colors(n,-1);
+
+        for(int i = 0 ; i<n ; i++){
+            if(colors[i] == -1){
+                dfs(graph,i,0,colors);
+            }
+        }
+        return res;
+        
+    }
