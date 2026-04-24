@@ -1,0 +1,52 @@
+undirected + non weighted( unit distance) then bfs. 
+
+
+  class Solution {
+  public:
+    vector<int> shortestPath(int V, vector<vector<int>> &edges, int src) {
+        // code here
+        vector<vector<int>>a(V);
+        
+        // graph
+        for(int i = 0 ; i<edges.size(); i++){
+            int src = edges[i][0];
+            int dest = edges[i][1];
+            
+            //undirected graph
+            a[src].push_back(dest);
+            a[dest].push_back(src);
+        }
+        
+        //following can be merged at single res
+        vector<int>res(V,-1);
+        vector<int>vst(V,0);
+        
+        //bfs = queueA
+        queue<pair<int,int>> q;
+        q.push({src,0});
+        vst[src] = 1 ;
+        res[src] = 0;  // source distance = 0
+        
+        
+        while(!q.empty()){
+            pair<int,int>p = q.front();
+            q.pop();
+            
+            int node = p.first;
+            int dist = p.second;
+            res[node]= dist;
+            
+            //explore all weight
+            
+            for(int j = 0 ; j<a[node].size();j++){
+                int neigh = a[node][j];
+                if(vst[neigh] == 0){
+                    q.push({neigh,dist+1});
+                    vst[neigh] = 1 ;
+                    res[neigh] = dist+1; // set distance when discovered
+                }
+            }
+        }
+        return res;
+    }
+};
