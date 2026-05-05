@@ -1,0 +1,104 @@
+/* comman syntax related doubt
+
+1. edges is the collections of all edges (2d) {{0,1,2}, {1,2,3}}
+    edge = edges[0] => {0,1,2}
+    
+    
+2. why two loops , outer loop i repeat relaxation n-1 times , inner loop j go through all edges 
+each time
+*/
+
+//Bellman ford implementation
+vector<int> bellman_ford(int n , vector<vector<int>> edges , int src){
+    const int INF = 1e8;
+    vector<int>res(n,INF);
+    res[src] = 0 ;
+    
+    for(int i = 0 ; i<n-1; i++){
+        for(int j = 0 ; j<edges.size(); j++){
+            int src = edges[j][0];
+            int dest = edges[j][1];
+            int wt = edges[j][2];
+          
+          
+         //relaxation
+            if(res[src] != INF && res[dest]>res[src]+wt){
+            res[dest] = res[src]+wt;
+        }
+        }
+    }
+    
+    // testing for negative cycle
+    
+    for(int j = 0 ; j< edges.size(); j++){
+        int src = edges[j][0];
+        int dest = edges[j][1];
+        int wt = edges[j][2];
+        
+        if(res[src]!= INF && res[dest]>res[src]+wt){
+            return{-1};
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    int n;
+    cout<<"Enter no of vertices: "<<endl;
+    cin>>n;
+    int edge;
+    cout<<"Enter no of edges: "<<endl;
+    cin>>edge;
+    vector<vector<int>> edges;
+    cout<<"Enter edges as src dest wt: "<<endl;
+    for(int i = 0 ; i<edge ; i++){
+        int u , v, wt;
+        cin>>u>>v>>wt;
+        edges.push_back({u,v,wt});
+    }
+    int src;
+    cout<<"Enter src vertex:"<<endl;
+    cin>>src;
+    
+    vector<int> dist = bellman_ford(n,edges,src);
+    if(dist.size() == 1 && dist[0] == -1){
+        cout<<"Negative cycle detected: "<<endl;
+    }
+    else{
+        cout<<"Shortest path: "<<endl;
+        
+        for(int i = 0 ; i<n ; i++){
+            if(dist[i] == 1e8){
+                cout<<i<<":INF"<<endl;
+            }
+            else{
+                cout<<i<<":"<<dist[i]<<endl;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+o/p :
+
+Enter no of vertices: 
+4
+Enter no of edges: 
+5
+Enter edges as src dest wt: 
+0 1 3
+0 3 7
+1 2 2
+1 3 5
+2 3 3
+Enter src vertex:
+0
+Shortest path: 
+0:0
+1:2
+2:4
+3:7
+
