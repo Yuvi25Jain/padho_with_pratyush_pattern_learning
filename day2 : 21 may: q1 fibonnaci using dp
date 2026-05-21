@@ -1,0 +1,19 @@
+when to use? jab repetative calculation ho in recursion
+
+q1. lc 509 : fibonaci number
+  unordered_map<int,int> dp; //ye globally declared kro (can be array as well)
+int fib(int n) {
+    if(n == 0){
+        return 0;   // ✅ Fibonacci definition: F(0) = 0
+    }
+    if(n == 1){
+        return 1;   // ✅ F(1) = 1
+    }
+    if(dp.find(n) != dp.end()){
+        return dp[n];   // Agar pehle se calculate hai toh wahi return karo
+    }
+    int ans1 = fib(n-1);
+    int ans2 = fib(n-2);
+    dp[n] = ans1 + ans2; // ✅ Store karna zaruri hai future ke liye
+    return dp[n];
+}
