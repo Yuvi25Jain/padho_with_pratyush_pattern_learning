@@ -1,0 +1,73 @@
+LIS: longest increasing subsqeuence
+
+  subsequece ? 
+  means we can skip elements in the array
+
+  eg ; a = {10,3,4,5,6} => ✅ {10,3,5} skip 4 (allowed)
+                            ❌ {3,10,4} (we can;t change the position of element)
+
+increasing means strictly increasing = {5 , 5 ,10} length will be 2 not 3 because 5 is repeated and not strcitly increasing.
+  
+  at every element of array we have choices whether to take it or not . we can only take it if a[prev] < a[i] else we have to skip that element is a[prev]>a[i]. 
+
+Approaches: recursion (do choices hai whether to take element or not) -> dp(memoization) -> tabulation -> optimisied tabulation (to save space) -> Binary search (optimised).
+
+as it is template to use anywhere:
+
+1. Recursion
+
+int recur(vector<int>& nums ,int n , int i , int prev ){ // i = current element , prev = previous
+        if(i == n) return 0;   //base case
+
+        if(prev == -1 or nums[i] > nums[prev]){  //prev == -1 means no element in the prev .
+            int c1 = 1 + recur(nums,n,i+1,i);   //take that element means yes also update prev = i 
+            int c2 = recur(nums,n,i+1, prev);  // no going to take that element
+            return  max(c1,c2);
+        }
+        return recur(nums,n,i+1,prev);
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        
+
+        return recur(nums,n, 0,-1);
+
+        
+    }
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. Memoization:
+
+to convert recursion into memoization first see recursion code check which 2 entities are being changed. 
+
+here i = current , prev 
+
+int recur(vector<int>& nums ,int n , int i , int prev , vector<vector<int>>& dp){ 
+        if(i == n) return 0;              //let base case untouched
+
+        if(dp[i][prev+1] != -1){
+            return dp[i][prev+1];  //if dp[i][prev] if prev = -1 . we are accessing the invalid -1 position of prev and will throw segmentation error. so to fix these fix prev+1
+        }
+
+        if(prev == -1 or nums[i] > nums[prev]){
+            int c1 = 1 + recur(nums,n,i+1,i,dp);
+            int c2 = recur(nums,n,i+1, prev,dp);
+            return dp[i][prev+1] = max(c1,c2);
+        }
+        return dp[i][prev+1] = recur(nums,n,i+1,prev,dp);
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        
+        vector<vector<int>>dp(n, vector<int>(n+1,-1));
+        return recur(nums,n, 0,-1,dp);
+
+        
+    }
+
+explaination:
+
+vector<vector<int>> dp(n, vector<int>(n+1, -1));
+it will create 2d vector (like matrix) , 
+n = number of rows each row corresponds to index i
+  vector<int>(n+1,-1) means each rows itself is a vector of size(n+1) filled with -1
