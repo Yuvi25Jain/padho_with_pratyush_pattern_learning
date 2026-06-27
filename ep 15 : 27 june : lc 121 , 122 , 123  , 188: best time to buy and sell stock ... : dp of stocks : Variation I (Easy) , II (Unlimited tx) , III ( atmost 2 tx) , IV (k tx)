@@ -1,0 +1,485 @@
+/* BUY AND SELL STOCK I
+
+
+question: given an array of stock ... we have to buy the stock at the min price and we should get maximum profit possible. */
+
+//approach 1 : for loop : sliding window
+// int maxprofit(vector<int>&a){
+//     int n = a.size();
+//     int maxprf = 0 ;
+    
+//     for(int i = 0 ; i<n ; i++){
+//         for(int j = i+1 ; j<n ; j++){
+//             int prf = a[j]-a[i];
+//             maxprf = max(maxprf,prf);
+//         }
+//     }
+//     return maxprf;
+// }
+
+
+
+
+
+// approach 2 : recursion  (dp)
+// int helper(vector<int>&a , int n , int i , int k){
+//     if (i == n){
+//         return 0 ;
+//     }
+//     if (k == 0){
+//         return 0 ;
+        
+//     }
+//     else if (k == 2){
+//         int c1 = helper(a,n,i+1,k-1)-a[i];
+//         int c2 = helper(a,n,i+1,k);
+        
+//         return max(c1,c2);
+//     }
+//     else{
+//         int c1 = helper(a,n,i+1,k-1)+a[i];
+//         int c2 = helper(a,n,i+1,k);
+        
+//         return max(c1,c2);
+//     }
+// }
+
+
+
+// int maxprofit(vector<int>&a){
+//     int n = a.size();
+//     int k = 2;
+//     int gain = helper(a,n,0,k);
+//     return gain;
+// }
+
+// approach 3 :  memoization
+
+// int helper(vector<int>&a, int n , int i , int k, vector<vector<int>>&dp){
+//     if (i == n) return 0;
+//     if(k == 0) return 0;
+
+//     if(dp[i][k] != -1) return dp[i][k];
+    
+//     else if(k== 2){
+//         int c1 = helper(a,n,i+1,k-1,dp) - a[i];
+//         int c2 = helper(a,n,i+1,k,dp);
+//         return dp[i][k] = max(c1,c2);
+//     }
+//     else{
+//         int c1 = helper(a,n,i+1,k-1,dp) + a[i];
+//         int c2 = helper(a,n,i+1,k,dp);
+//         return dp[i][k] = max(c1,c2);
+        
+//     }
+// }
+ 
+// int maxprofit(vector<int>&a){
+//     int n = a.size();
+//     int k = 2;
+//     vector<vector<int>>dp(n+1, vector<int>(k+1,-1));
+//     return helper(a,n,0,k,dp);
+// }
+
+
+//approach 4 : tabulation
+int maxprofit(vector<int>&a){
+    int n = a.size();
+    int k = 2;
+    
+    vector<vector<int>>dp(n+1, vector<int>(k+1,0));
+    for(int i = n-1 ; i>=0 ; i--){
+        for(int moves = 1 ; moves<= k ;moves++){
+            if(moves == 2){
+                int c1 = dp[i+1][moves-1] - a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+            }
+            else{
+                int c1 = dp[i+1][moves-1] + a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+                
+            }
+        }
+    }
+    return dp[0][k];
+}
+
+
+int main()
+{
+    vector<int>a;
+    input(a);
+    output(a);
+    cout<<endl;
+    cout<<"Maximum profit possible: "<<maxprofit(a)<<endl;
+
+    return 0;
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+BUY AND SELL STOCK VARIATION 2 (UNLIMITED TRANSACTION). 
+buy - sell , buy - sell ✅
+buy - buy - buy then sell - sell - sell ❌
+
+
+earlier question after selling we decrement k to 0 ( k == 0) to end the transaction...  but this tym as soon as k == 1 reaches immediately pass 2 again instead of k-1 to create cycle.
+
+just replace else wala block me 2 with k-1 in first selling choice :   int c1 = helper(a,n,i+1,2)+a[i];
+
+
+
+//approach 1 : brute force : everytime price goes up , take profit , sum of all positive difference
+
+int maxProfit(vector<int>& prices) 
+{
+        int n = prices.size();
+        int profit = 0;
+
+        for (int i = 1; i < n; i++) {
+            if (prices[i] > prices[i-1]) {
+                profit += prices[i] - prices[i-1]; // take every rise
+            }
+        }
+        return profit;
+}
+
+//approach 2: recursion : just fix else wala block choice where we are selling the stock.
+int helper(vector<int>&a , int n , int i , int k){
+    if (i == n){
+        return 0 ;
+    }
+    if (k == 0){
+        return 0 ;
+        
+    }
+    else if (k == 2){
+        int c1 = helper(a,n,i+1,k-1)-a[i];
+        int c2 = helper(a,n,i+1,k);
+        
+        return max(c1,c2);
+    }
+    else{
+        int c1 = helper(a,n,i+1,2)+a[i];
+        int c2 = helper(a,n,i+1,k);
+        
+        return max(c1,c2);
+    }
+}
+
+
+
+int maxprofit_one(vector<int>&a){
+    int n = a.size();
+    int k = 2;
+    int gain = helper(a,n,0,k);
+    return gain;
+}
+
+//approach 3 :  memoization
+
+int helper_one(vector<int>&a, int n , int i , int k, vector<vector<int>>&dp){
+    if (i == n) return 0;
+    if(k == 0) return 0;
+
+    if(dp[i][k] != -1) return dp[i][k];
+    
+    else if(k== 2){
+        int c1 = helper_one(a,n,i+1,k-1,dp) - a[i];
+        int c2 = helper_one(a,n,i+1,k,dp);
+        return dp[i][k] = max(c1,c2);
+    }
+    else{
+        int c1 = helper_one(a,n,i+1,2,dp) + a[i];
+        int c2 = helper_one(a,n,i+1,k,dp);
+        return dp[i][k] = max(c1,c2);
+        
+    }
+}
+ 
+int maxprofit_two(vector<int>&a){
+    int n = a.size();
+    int k = 2;
+    vector<vector<int>>dp(n+1, vector<int>(k+1,-1));
+    return helper_one(a,n,0,k,dp);
+}
+
+//approach 4: tabulation:
+int maxprofit_t(vector<int>&a){
+    int n = a.size();
+    int k = 2;
+    
+    vector<vector<int>>dp(n+1, vector<int>(k+1,0));
+    for(int i = n-1 ; i>=0 ; i--){
+        for(int moves = 1 ; moves<= k ;moves++){
+            if(moves == 2){
+                int c1 = dp[i+1][moves-1] - a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+            }
+            else{
+                int c1 = dp[i+1][2] + a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+                
+            }
+        }
+    }
+    return dp[0][k];
+}
+
+
+
+
+
+int main(){
+    vector<int>a;
+    input(a);
+    output(a);
+    cout<<endl;
+    cout<<"Brute force : "<<maxProfit(a);
+    cout<<endl;
+    cout<<"Recursion: "<<maxprofit_one(a);
+    cout<<endl;
+    cout<<"Memoization: "<<maxprofit_two(a);
+    cout<<endl;
+    cout<<"tabulation: "<<maxprofit_t(a);
+    
+    
+    return 0 ;
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+BUY AND SELL III (AT MOST 2 TX):
+
+buy - sell (2) , buy - sell (2) => k = 2+2 = 4.
+
+what to change? on even k (4,2) we have to buy (so change k == 2 with k%2 == 0) and on odd k (3,1) we have to sell... and in main function just k = 4.
+
+//approach 1 : brute force 
+int maxProfit(vector<int>& a) { // k = 4 hence 4 variable i , j , k ,l
+    int n = a.size();
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i+1; j < n; j++) {
+            for (int k = j+1; k < n; k++) {
+                for (int l = k+1; l < n; l++) {
+                    int prf = (a[j]-a[i]) + (a[l]-a[k]);
+                    ans = max(ans, prf);
+                }
+            }
+        }
+    }
+    return ans;
+}
+
+//approach 2: recursion : just replace even for buy and odd for sell
+int helper(vector<int>&a , int n , int i , int k){
+    if (i == n){
+        return 0 ;
+    }
+    if (k == 0){
+        return 0 ;
+        
+    }
+    else if (k%2 == 0){
+        int c1 = helper(a,n,i+1,k-1)-a[i];
+        int c2 = helper(a,n,i+1,k);
+        
+        return max(c1,c2);
+    }
+    else{
+        int c1 = helper(a,n,i+1,k-1)+a[i];
+        int c2 = helper(a,n,i+1,k);
+        
+        return max(c1,c2);
+    }
+}
+
+
+
+int maxprofit_one(vector<int>&a){
+    int n = a.size();
+    int k = 4;
+    int gain = helper(a,n,0,k);
+    return gain;
+}
+
+//approach 3 :  memoization
+
+int helper_one(vector<int>&a, int n , int i , int k, vector<vector<int>>&dp){
+    if (i == n) return 0;
+    if(k == 0) return 0;
+
+    if(dp[i][k] != -1) return dp[i][k];
+    
+    else if(k%2 == 0){
+        int c1 = helper_one(a,n,i+1,k-1,dp) - a[i];
+        int c2 = helper_one(a,n,i+1,k,dp);
+        return dp[i][k] = max(c1,c2);
+    }
+    else{
+        int c1 = helper_one(a,n,i+1,k-1,dp) + a[i];
+        int c2 = helper_one(a,n,i+1,k,dp);
+        return dp[i][k] = max(c1,c2);
+        
+    }
+}
+ 
+int maxprofit_two(vector<int>&a){
+    int n = a.size();
+    int k = 4;
+    vector<vector<int>>dp(n+1, vector<int>(k+1,-1));
+    return helper_one(a,n,0,k,dp);
+}
+
+//approach 4: tabulation:
+int maxprofit_t(vector<int>&a){
+    int n = a.size();
+    int k = 4;
+    
+    vector<vector<int>>dp(n+1, vector<int>(k+1,0));
+    for(int i = n-1 ; i>=0 ; i--){
+        for(int moves = 1 ; moves<= k ;moves++){
+            if(moves%2 == 0){
+                int c1 = dp[i+1][moves-1] - a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+            }
+            else{
+                int c1 = dp[i+1][moves-1] + a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+                
+            }
+        }
+    }
+    return dp[0][k];
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BUY AND SELL STOCK IV( k TX)
+
+just replace k = k*2 in main function.
+
+//approach 1 : brute force 
+int maxProfit(vector<int>& a, int k) {
+    int n = a.size();
+    int ans = 0;
+    // For k=2 we had 4 loops, for k=3 we’d have 6 loops, etc.
+    // General brute force = 2k nested loops.
+    // Example for k=2 shown earlier.
+    // For k=3:
+    for(int i1=0;i1<n;i1++){
+        for(int j1=i1+1;j1<n;j1++){
+            for(int i2=j1+1;i2<n;i2++){
+                for(int j2=i2+1;j2<n;j2++){
+                    for(int i3=j2+1;i3<n;i3++){
+                        for(int j3=i3+1;j3<n;j3++){
+                            int prf = (a[j1]-a[i1]) + (a[j2]-a[i2]) + (a[j3]-a[i3]);
+                            ans = max(ans, prf);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return ans;
+}
+
+//approach 2: recursion : just replace even for buy and odd for sell
+int helper(vector<int>&a , int n , int i , int k){
+    
+    if (i == n){
+        return 0 ;
+    }
+    if (k == 0){
+        return 0 ;
+        
+    }
+    else if (k%2 == 0){
+        int c1 = helper(a,n,i+1,k-1)-a[i];
+        int c2 = helper(a,n,i+1,k);
+        
+        return max(c1,c2);
+    }
+    else{
+        int c1 = helper(a,n,i+1,k-1)+a[i];
+        int c2 = helper(a,n,i+1,k);
+        
+        return max(c1,c2);
+    }
+}
+
+
+
+int maxprofit_one(vector<int>&a){
+    int n = a.size();
+    int k = k*2;
+    int gain = helper(a,n,0,k);
+    return gain;
+}
+
+//approach 3 :  memoization
+
+int helper_one(vector<int>&a, int n , int i , int k, vector<vector<int>>&dp){
+    if (i == n) return 0;
+    if(k == 0) return 0;
+
+    if(dp[i][k] != -1) return dp[i][k];
+    
+    else if(k%2 == 0){
+        int c1 = helper_one(a,n,i+1,k-1,dp) - a[i];
+        int c2 = helper_one(a,n,i+1,k,dp);
+        return dp[i][k] = max(c1,c2);
+    }
+    else{
+        int c1 = helper_one(a,n,i+1,k-1,dp) + a[i];
+        int c2 = helper_one(a,n,i+1,k,dp);
+        return dp[i][k] = max(c1,c2);
+        
+    }
+}
+ 
+int maxprofit_two(vector<int>&a, int k){
+    int n = a.size();
+     k = k*2;
+    vector<vector<int>>dp(n+1, vector<int>(k+1,-1));
+    return helper_one(a,n,0,k,dp);
+}
+
+//approach 4: tabulation:
+int maxprofit_t(vector<int>&a,int k){
+    int n = a.size();
+     k = k*2;
+    
+    vector<vector<int>>dp(n+1, vector<int>(k+1,0));
+    for(int i = n-1 ; i>=0 ; i--){
+        for(int moves = 1 ; moves<= k ;moves++){
+            if(moves%2 == 0){
+                int c1 = dp[i+1][moves-1] - a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+            }
+            else{
+                int c1 = dp[i+1][moves-1] + a[i];
+                int c2 = dp[i+1][moves];
+                dp[i][moves] = max(c1,c2);
+                
+            }
+        }
+    }
+    return dp[0][k];
+}
+
+
+
+
+
+
+
+
+
+
