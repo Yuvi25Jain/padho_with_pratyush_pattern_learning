@@ -1,0 +1,34 @@
+# Kadane algo ?
+
+overcome the drawback of sliding window ( it can't work with negative element as increase high can either increase or descrease sum and same for low pointer)
+
+Kadance works perfectly with negative element
+
+when to apply :
+subarray -> contiguous -> max/min  (best) -> sum/product 
+
+Thought process
+ending with i index. 
+
+we will use best_ans and res variable... best_ans have two choices 
+ i. only itself
+ii. itself with previous answer.
+then max of both choices
+then max of res and best_ans;
+
+best_ans = a[0] , res = a[0];
+for(int i = 1 ; i<n ; i++){
+int v1 = a[i];
+int v2 = best_ans + a[i];
+best_ans = max/min (vi,v2);
+res= max(res, best_ans)
+}
+return res;
+}
+
+for product there will be three choices... maxend, minend , simple alone element
+
+if we multiple any smallest digit with -ve value we get max result. but positve require max valye to get max result
+
+-ve * min = max result (-4*2 = -8  (ans)> -4*3 = -12)
++ve * max = max result
